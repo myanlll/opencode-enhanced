@@ -221,13 +221,25 @@ bun run --cwd packages/opencode build --single
 Two things in this fork are *not* cheap to rebase, be aware:
 
 - **`README.md`** is fully rewritten here. Upstream also owns this file, so a
-  future rebase will very likely conflict on it. Resolution is just
-  `git checkout --ours README.md` (keep this fork's version) every time,
-  not a real merge, but git will stop and ask.
+  future rebase will likely conflict on it, possibly more than once, since
+  several commits in this fork touch it. Each time, resolve with:
+
+  ```bash
+  git checkout --theirs README.md
+  git add README.md
+  git rebase --continue
+  ```
+
+  **Important, and easy to get backwards:** during a rebase, `--ours` means
+  the branch you are rebasing *onto* (upstream), and `--theirs` means the
+  commit being replayed (this fork's own change). That is the opposite of
+  what `--ours`/`--theirs` mean during a normal merge, and it is a common
+  source of silently keeping the wrong version. This was verified by actually
+  running the rebase against a simulated future upstream commit, not assumed.
 - **The 21 translated `README.*.md` files were deleted** in this fork. If a
   future upstream release touches one of those, the rebase will pause on a
   modify/delete conflict. Resolution is `git rm <file>` to confirm the
-  deletion and continue, again mechanical, but not silent.
+  deletion and continue.
 
 Neither is dangerous, both are `git status` telling you exactly where it
 stopped, but don't expect the update to be a single command with zero
