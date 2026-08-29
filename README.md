@@ -207,9 +207,9 @@ More detail in [`docs/opencode-enhanced.md`](docs/opencode-enhanced.md).
 
 ## Staying current with upstream
 
-Upstream opencode moves fast. This fork is deliberately small so that rebasing
-stays cheap, the tokens/second change touches one file, and the browser
-automation change touches two.
+Upstream opencode moves fast. Rebasing is cheap for the two actual code
+changes: tokens/second touches one file, browser automation touches two, and
+neither is a file upstream is likely to touch the same way.
 
 ```bash
 git fetch origin
@@ -217,6 +217,21 @@ git rebase v<latest-tag>
 bun install
 bun run --cwd packages/opencode build --single
 ```
+
+Two things in this fork are *not* cheap to rebase, be aware:
+
+- **`README.md`** is fully rewritten here. Upstream also owns this file, so a
+  future rebase will very likely conflict on it. Resolution is just
+  `git checkout --ours README.md` (keep this fork's version) every time,
+  not a real merge, but git will stop and ask.
+- **The 21 translated `README.*.md` files were deleted** in this fork. If a
+  future upstream release touches one of those, the rebase will pause on a
+  modify/delete conflict. Resolution is `git rm <file>` to confirm the
+  deletion and continue, again mechanical, but not silent.
+
+Neither is dangerous, both are `git status` telling you exactly where it
+stopped, but don't expect the update to be a single command with zero
+prompts.
 
 ## License
 
