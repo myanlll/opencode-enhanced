@@ -1,5 +1,16 @@
 # opencode-enhanced
 
+[![License: PolyForm Noncommercial](https://img.shields.io/badge/License-PolyForm%20Noncommercial-blue.svg)](LICENSE)
+[![Built on opencode](https://img.shields.io/badge/built%20on-opencode-black)](https://github.com/anomalyco/opencode)
+[![GitHub stars](https://img.shields.io/github/stars/myanlll/opencode-enhanced?style=social)](https://github.com/myanlll/opencode-enhanced)
+
+|  |  |  |
+|---|---|---|
+| **Get started** | [Quick install](#install) | [BYOK setup](#bring-your-own-key-byok) |
+| **The three additions** | [Tokens/second](#1-tokenssecond-indicator) | [`chat` mode](#2-chat-agent-mode) · [Browser automation](#3-browser-automation) |
+| **Keeping it updated** | [Staying current with upstream](#staying-current-with-upstream) | [Troubleshooting](docs/opencode-enhanced.md) |
+| **The fine print** | [License](#license) | [Attribution](NOTICE.md) |
+
 Hello folks! This one started as a personal itch, not a grand plan. I run models
 on my own hardware, a mix of local and remote self-hosted boxes, and
 [opencode](https://github.com/anomalyco/opencode)
