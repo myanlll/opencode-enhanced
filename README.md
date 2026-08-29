@@ -1,12 +1,15 @@
 # opencode-enhanced
 
-A small, opinionated distribution of [opencode](https://github.com/anomalyco/opencode) —
-the open source AI coding agent — with three additions aimed at people who run
-**local and self-hosted LLMs** and want a **browser-capable agent** without
-switching to a closed-source IDE.
+Hello folks! This one started as a personal itch, not a grand plan. I run models
+on my own hardware (a spare RTX 3070Ti over Tailscale, plus whatever my Mac's
+GPU can chew through locally), and [opencode](https://github.com/anomalyco/opencode)
+never told me how fast those models were actually running. "Feels slow today"
+is not a metric, so I fixed that, then kept going and fixed two more things
+while I was in there.
 
-This is a fork, not a rewrite. Almost all of the code here is opencode's, and
-upstream deserves the credit for it. What this repo adds is small and specific:
+To be clear up front: this is a fork, not a rewrite. 99% of the code here is
+opencode's, and all the credit for the hard part goes to them, I just bolted
+three things onto it that I personally wanted:
 
 | # | Addition | Why |
 |---|---|---|
