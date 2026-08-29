@@ -1,4 +1,4 @@
-# NOTICE — attribution and license compliance
+# NOTICE, attribution and license compliance
 
 This project is a derivative work. It combines three lineages:
 
@@ -50,7 +50,7 @@ notice condition and because attribution is simply the right thing to do.
 ## License of this combined work
 
 The combined work is distributed under the **PolyForm Noncommercial License
-1.0.0** — see `LICENSE`.
+1.0.0**, see `LICENSE`.
 
 ### Why this is permitted
 
@@ -59,7 +59,7 @@ distribute, sublicense, and/or sell copies", subject to one condition: the
 copyright notice and permission notice must be preserved. It does not require
 derivative works to be licensed under MIT. Relicensing a derivative work under
 different (including more restrictive) terms is therefore permitted, provided
-the original notices are preserved — which is what `LICENSES/` and this file do.
+the original notices are preserved, which is what `LICENSES/` and this file do.
 
 ### What this does *not* do
 

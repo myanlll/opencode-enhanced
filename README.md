@@ -1,8 +1,8 @@
 # opencode-enhanced
 
 Hello folks! This one started as a personal itch, not a grand plan. I run models
-on my own hardware (a spare RTX 3070Ti over Tailscale, plus whatever my Mac's
-GPU can chew through locally), and [opencode](https://github.com/anomalyco/opencode)
+on my own hardware, a mix of local and remote self-hosted boxes, and
+[opencode](https://github.com/anomalyco/opencode)
 never told me how fast those models were actually running. "Feels slow today"
 is not a metric, so I fixed that, then kept going and fixed two more things
 while I was in there.
@@ -25,8 +25,8 @@ opencode shows you the response. It does not show you how *fast* it arrived.
 
 That is fine when you are calling a hosted frontier model, where throughput is
 roughly constant and not your problem. It is much less fine when you are running
-your own inference — Ollama, vLLM, llama.cpp, LM Studio, a spare GPU box over
-Tailscale — because generation speed is the single number that tells you whether
+your own inference, Ollama, vLLM, llama.cpp, LM Studio, a spare GPU box on the
+network, because generation speed is the single number that tells you whether
 your setup is healthy.
 
 Quantisation level, context length, GPU/CPU split, whether the model actually
@@ -51,7 +51,7 @@ No configuration. It is always on.
 
 ## 2. `chat` agent mode
 
-Many capable local models are poor at — or entirely incapable of — tool calling.
+Many capable local models are poor at, or entirely incapable of, tool calling.
 Point opencode at one of those and you get a bad time: the agent tries to invoke
 tools, the model emits malformed calls or hallucinates results, and the session
 derails before you get an answer.
@@ -62,18 +62,18 @@ conversational assistant with no file, shell, or network access.
 
 Useful for:
 
-- Models with no tool-calling support at all (Gemma 2, many uncensored finetunes)
+- Models with no tool-calling support at all (Gemma 2, many finetunes)
 - Models whose tool-calling is unreliable enough to be worse than nothing
 - Just wanting to ask a question without an agent deciding to read your repo
 
 Select it like any other agent mode. The definition lives in your
-`opencode.json` — see [`docs/opencode-enhanced.md`](docs/opencode-enhanced.md) for the
+`opencode.json`, see [`docs/opencode-enhanced.md`](docs/opencode-enhanced.md) for the
 exact block to copy.
 
 ## 3. Browser automation
 
-An agent that can drive a real browser — navigate, click, fill forms, read
-rendered pages — is the headline feature of tools like Google's Antigravity. You
+An agent that can drive a real browser (navigate, click, fill forms, read
+rendered pages) is the headline feature of tools like Google's Antigravity. You
 do not need a closed-source IDE for it.
 
 This fork can register Microsoft's official
@@ -124,8 +124,8 @@ Requires [Bun](https://bun.sh) (the version in the root `package.json`
 `packageManager` field) and a C toolchain for native modules.
 
 ```bash
-git clone <this-repo>
-cd opencode
+git clone https://github.com/myanlll/opencode-enhanced.git
+cd opencode-enhanced
 bun install
 bun run --cwd packages/opencode build --single
 ```
@@ -137,7 +137,7 @@ packages/opencode/dist/opencode-<platform>-<arch>/bin/opencode
 ```
 
 Put it somewhere on your `PATH`, or keep it out of the way and use a shell
-wrapper — the wrapper approach is handy because it lets you pin environment
+wrapper, the wrapper approach is handy because it lets you pin environment
 variables:
 
 ```bash
@@ -197,7 +197,7 @@ API keys go in opencode's credential store, **never in your config file or this
 repo**:
 
 ```jsonc
-// ~/.local/share/opencode/auth.json  — git-ignored, chmod 600
+// ~/.local/share/opencode/auth.json , git-ignored, chmod 600
 {
   "nvidia": { "type": "api", "key": "nvapi-YOUR_KEY_HERE" }
 }
@@ -208,7 +208,7 @@ More detail in [`docs/opencode-enhanced.md`](docs/opencode-enhanced.md).
 ## Staying current with upstream
 
 Upstream opencode moves fast. This fork is deliberately small so that rebasing
-stays cheap — the tokens/second change touches one file, and the browser
+stays cheap, the tokens/second change touches one file, and the browser
 automation change touches two.
 
 ```bash
@@ -220,13 +220,13 @@ bun run --cwd packages/opencode build --single
 
 ## License
 
-**PolyForm Noncommercial License 1.0.0** — free to use, modify, and share for
+**PolyForm Noncommercial License 1.0.0**, free to use, modify, and share for
 any noncommercial purpose. See [`LICENSE`](LICENSE).
 
 To be accurate rather than flattering: PolyForm Noncommercial is
 **source-available**, not OSI-approved open source, because it restricts field
 of use. If you need a permissive, commercially-usable license, use
-[upstream opencode](https://github.com/anomalyco/opencode) directly — it is MIT,
+[upstream opencode](https://github.com/anomalyco/opencode) directly, it is MIT,
 and this fork cannot and does not change that.
 
 Both upstream projects are MIT and their notices are preserved in
@@ -234,11 +234,11 @@ Both upstream projects are MIT and their notices are preserved in
 
 ## Credits
 
-- [**opencode**](https://github.com/anomalyco/opencode) — the actual coding
+- [**opencode**](https://github.com/anomalyco/opencode), the actual coding
   agent this is built on. Nearly all credit belongs here.
-- [**Kilo Code**](https://github.com/Kilo-Org/kilocode) — the browser
+- [**Kilo Code**](https://github.com/Kilo-Org/kilocode), the browser
   automation approach.
-- [**Playwright MCP**](https://github.com/microsoft/playwright-mcp) — Microsoft's
+- [**Playwright MCP**](https://github.com/microsoft/playwright-mcp), Microsoft's
   MCP server doing the real browser work.
 
 Upstream's original README is preserved as

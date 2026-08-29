@@ -27,7 +27,7 @@ files. It is designed to be cheap to rebase as upstream moves.
 
 - **Browser automation.** Setting `OPENCODE_BROWSER_AUTOMATION=1` auto-registers
   Microsoft's official `@playwright/mcp` server, giving the agent real browser
-  control — navigate, click, fill forms, read rendered pages — with no manual
+  control, navigate, click, fill forms, read rendered pages, with no manual
   MCP setup. Uses system-installed Chrome by default and runs headed by default.
   Additional switches: `OPENCODE_BROWSER_HEADLESS`,
   `OPENCODE_BROWSER_SYSTEM_CHROME`. Ported from Kilo Code, which implements its
@@ -37,7 +37,7 @@ files. It is designed to be cheap to rebase as upstream moves.
 ## Bring your own key (BYOK)
 
 Any OpenAI-compatible endpoint works through the `@ai-sdk/openai-compatible`
-adapter, so hosted APIs and local servers are configured identically — NVIDIA
+adapter, so hosted APIs and local servers are configured identically, NVIDIA
 NIM (`https://integrate.api.nvidia.com/v1`), Ollama, vLLM, LM Studio, OpenRouter,
 Together, and similar. Providers are declared in `opencode.json`; API keys live
 in `~/.local/share/opencode/auth.json` and are never committed.
@@ -48,7 +48,7 @@ in `~/.local/share/opencode/auth.json` and are never committed.
 - Build: `bun install && bun run --cwd packages/opencode build --single`
 - macOS caveat: re-sign with `codesign --force --sign - <binary>` after copying
   a Bun-compiled binary, or it is SIGKILLed with exit code 137.
-- License: PolyForm Noncommercial 1.0.0 — source-available, free for
+- License: PolyForm Noncommercial 1.0.0, source-available, free for
   noncommercial use, **not** OSI-approved open source. Upstream opencode and
   Kilo Code remain MIT and can be used commercially from their own repositories.
 
@@ -63,10 +63,10 @@ in `~/.local/share/opencode/auth.json` and are never committed.
 
 ## Upstream and attribution
 
-- opencode — <https://github.com/anomalyco/opencode> (MIT) — the base agent.
-- Kilo Code — <https://github.com/Kilo-Org/kilocode> (MIT) — browser automation
+- opencode, <https://github.com/anomalyco/opencode> (MIT), the base agent.
+- Kilo Code, <https://github.com/Kilo-Org/kilocode> (MIT), browser automation
   approach; itself an opencode derivative.
-- Playwright MCP — <https://github.com/microsoft/playwright-mcp> — performs the
+- Playwright MCP, <https://github.com/microsoft/playwright-mcp>, performs the
   actual browser automation.
 
 ## Keywords

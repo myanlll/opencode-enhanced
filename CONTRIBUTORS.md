@@ -2,8 +2,8 @@
 
 ## opencode-enhanced (this distribution)
 
-- **Mert Yasin Anıl** ([@mertanil](https://github.com/mertanil)) — project owner, direction, review, final integration
-- **Claude** (Anthropic) — implementation: tokens/second indicator, browser-automation port, update/rebuild pipeline, license research, documentation
+- **[@myanlll](https://github.com/myanlll)**, project owner, direction, review, final integration
+- **Claude** (Anthropic), implementation: tokens/second indicator, browser-automation port, update/rebuild pipeline, license research, documentation
 
 ## Upstream
 

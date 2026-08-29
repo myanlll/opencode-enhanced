@@ -1,4 +1,4 @@
-# opencode-enhanced — configuration, build notes, and troubleshooting
+# opencode-enhanced, configuration, build notes, and troubleshooting
 
 Companion document to the [README](../README.md).
 
@@ -9,15 +9,15 @@ Companion document to the [README](../README.md).
 ### `chat` agent mode
 
 Add to `~/.config/opencode/opencode.json`. All tools disabled, all permissions
-denied — a plain conversational assistant for models that cannot tool-call.
+denied, a plain conversational assistant for models that cannot tool-call.
 
 ```jsonc
 {
   "agent": {
     "chat": {
       "mode": "primary",
-      "description": "Plain chat mode — no tool calling required",
-      "prompt": "You are a helpful, direct conversational assistant. Respond naturally and concisely to the user's message. You have no tools and no code/file access — this is a plain chat conversation.",
+      "description": "Plain chat mode, no tool calling required",
+      "prompt": "You are a helpful, direct conversational assistant. Respond naturally and concisely to the user's message. You have no tools and no code/file access, this is a plain chat conversation.",
       "tools": {
         "bash": false, "read": false, "edit": false, "glob": false,
         "grep": false, "webfetch": false, "task": false, "todowrite": false,
@@ -58,13 +58,13 @@ entry into the resolved MCP config; flags are declared in
 takes precedence.
 
 Requires `npx` on `PATH`. The first run downloads `@playwright/mcp`, so allow
-extra time — the configured startup timeout is 60s.
+extra time, the configured startup timeout is 60s.
 
 ### Environment variables inherited from upstream
 
 `OPENCODE_DISABLE_CHANNEL_DB=1` forces the shared main database
 (`opencode.db`) instead of a per-channel database. This is **stock upstream
-behaviour**, implemented in `packages/core/src/database/database.ts` — not
+behaviour**, implemented in `packages/core/src/database/database.ts`, not
 something this fork adds. Useful if you build your own binary and do not want
 sessions split across a separate channel-specific database file.
 
@@ -85,7 +85,7 @@ Useful flags for `build`:
 | Flag | Effect |
 |---|---|
 | `--single` | Build only for the current platform (otherwise: all targets) |
-| `--skip-install` | Skip re-installing cross-platform native deps — much faster on rebuilds |
+| `--skip-install` | Skip re-installing cross-platform native deps, much faster on rebuilds |
 | `--sourcemaps` | Emit linked sourcemaps |
 
 Publishing is gated behind the `OPENCODE_RELEASE` environment variable
@@ -118,7 +118,7 @@ $ echo $?
 137
 ```
 
-Exit 137 is `128 + 9` — SIGKILL. There is no error message anywhere.
+Exit 137 is `128 + 9`, SIGKILL. There is no error message anywhere.
 
 **Diagnosis.** The copy is byte-identical to the original:
 
@@ -136,7 +136,7 @@ $ codesign -v ~/.opencode-enhanced/opencode
 In architecture: x86_64
 ```
 
-Note that the *original* reports the same "invalid signature" — Bun-compiled
+Note that the *original* reports the same "invalid signature", Bun-compiled
 binaries carry an ad-hoc signature that does not survive relocation. The
 original keeps working because macOS cached a successful validation for it at
 its original path when the build's smoke test executed it. The copy has no such
@@ -166,8 +166,8 @@ Two things worth knowing:
 
 1. **It will not overwrite your build.** `Installation.method()`
    (`packages/opencode/src/installation/index.ts`) detects the install method by
-   probing package managers — e.g. running `brew list --formula opencode` —
-   *not* by looking at the path of the running binary. If you also have a
+   probing package managers, e.g. running `brew list --formula opencode`,
+   not by looking at the path of the running binary. If you also have a
    packaged opencode installed, the updater targets *that* copy, not your custom
    build. Additionally, automatic upgrades only run when the version delta is a
    `patch`; a `0.0.0` → `1.x.y` delta is a major bump, so the code path only ever
@@ -201,5 +201,5 @@ applying cleanly, the intent is small enough to reapply by hand: a
 `LiveTokenStatus` component rendered just above the prompt input, plus a
 `tokensPerSecond` memo appended to the assistant message footer.
 
-Always run `typecheck` before `build` — it fails much faster and catches
+Always run `typecheck` before `build`, it fails much faster and catches
 renamed upstream APIs, which is the realistic failure mode after a large jump.
