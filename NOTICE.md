@@ -32,10 +32,13 @@ To be precise about what was and was not copied: Kilo Code's implementation is a
 thin integration layer that registers Microsoft's official
 [`@playwright/mcp`](https://github.com/microsoft/playwright-mcp) server with the
 agent backend, passing `--headless` and `--browser chrome` flags based on user
-settings. This repository implements the equivalent behaviour natively against
-opencode's own MCP configuration layer. No Kilo Code source code was copied
-verbatim; the design and the specific flag/defaults choices are theirs, and
-attribution is given here accordingly.
+settings. This repository's version was written independently against
+opencode's own MCP configuration layer and its variable names and surrounding
+code are different, but the structure was closely ported: the same flag names,
+the same defaults, and the same shape of config object, including matching the
+`timeout: 60000` constant. No Kilo Code source file was copied verbatim, but
+this is a close structural port, not an independent reinvention, and is
+described that way here on purpose.
 
 Kilo Code's MIT license notice is preserved regardless, both to satisfy the MIT
 notice condition and because attribution is simply the right thing to do.
@@ -76,3 +79,13 @@ the field of use (item 6 of the OSD, "No Discrimination Against Fields of
 Endeavor"). Calling this project "open source" without qualification would be
 inaccurate; "source available, free for noncommercial use" is the accurate
 description.
+
+### GitHub's license detector
+
+GitHub's UI may show this repository's license as "Other" rather than
+recognizing "PolyForm Noncommercial" by name. `LICENSE` is kept as close to
+the canonical PolyForm Noncommercial 1.0.0 text as possible (see
+<https://polyformproject.org/licenses/noncommercial/1.0.0>) specifically so
+that automated license detectors have the best chance of matching it, but an
+exact match is not guaranteed. The license terms in `LICENSE` are what
+actually governs use, regardless of what any UI label says.

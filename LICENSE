@@ -134,25 +134,3 @@ of your licenses.
 
 Required Notice: Copyright (c) 2025 opencode (https://github.com/anomalyco/opencode)
 Required Notice: Copyright (c) 2026 Kilo Code (https://github.com/Kilo-Org/kilocode)
-
----
-
-## Scope of this license — please read
-
-This license applies to **this distribution as a combined work**, and in
-particular to the modifications and additions original to this repository.
-
-It does **not**, and legally cannot, retroactively restrict the upstream
-projects this work derives from. Both upstreams are MIT licensed:
-
-- **opencode** — MIT, Copyright (c) 2025 opencode — see `LICENSES/opencode-MIT.txt`
-- **Kilo Code** — MIT, Copyright (c) 2026 Kilo Code / (c) 2025 opencode — see `LICENSES/kilocode-MIT.txt`
-
-Anyone remains free to obtain those upstream projects directly under the MIT
-license and use them commercially. The noncommercial restriction here covers
-only this particular combination and the original work in it.
-
-Note also that PolyForm Noncommercial is a *source-available* license, not an
-OSI-approved open source license, because it restricts field of use.
-
-See `NOTICE.md` for the full attribution and compliance details.
