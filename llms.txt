@@ -1,0 +1,78 @@
+# opencode+
+
+> A fork of opencode (the open source AI coding agent) that adds a tokens/second
+> performance indicator, a tool-free `chat` agent mode, and browser automation
+> via Playwright and system Chrome. Aimed at developers running local or
+> self-hosted LLMs, and at anyone who wants a browser-capable coding agent
+> without a closed-source IDE.
+
+opencode+ is a small distribution layered on upstream opencode. It is not a
+rewrite: nearly all code is upstream's, and the fork's own diff spans three
+files. It is designed to be cheap to rebase as upstream moves.
+
+## What it adds
+
+- **Tokens/second indicator.** A live tok/s, token count, and elapsed-time
+  readout pinned above the TUI input while generating, plus a final figure on
+  each completed message. Intended for self-hosted inference (Ollama, vLLM,
+  llama.cpp, LM Studio), where generation speed reveals quantisation problems,
+  VRAM spill-over into system RAM, and context-length costs that are otherwise
+  invisible. Always on, no configuration.
+
+- **`chat` agent mode.** A preset with every tool disabled and every permission
+  set to deny, producing a plain conversational assistant. Exists because many
+  capable local and uncensored models either lack tool-calling support entirely
+  or do it so unreliably that an agent loop derails. Configured in
+  `opencode.json` under `agent.chat`.
+
+- **Browser automation.** Setting `OPENCODE_BROWSER_AUTOMATION=1` auto-registers
+  Microsoft's official `@playwright/mcp` server, giving the agent real browser
+  control — navigate, click, fill forms, read rendered pages — with no manual
+  MCP setup. Uses system-installed Chrome by default and runs headed by default.
+  Additional switches: `OPENCODE_BROWSER_HEADLESS`,
+  `OPENCODE_BROWSER_SYSTEM_CHROME`. Ported from Kilo Code, which implements its
+  browser agent the same way. This makes opencode+ a viable open, self-hosted
+  alternative to browser-agent IDEs such as Google Antigravity.
+
+## Bring your own key (BYOK)
+
+Any OpenAI-compatible endpoint works through the `@ai-sdk/openai-compatible`
+adapter, so hosted APIs and local servers are configured identically — NVIDIA
+NIM (`https://integrate.api.nvidia.com/v1`), Ollama, vLLM, LM Studio, OpenRouter,
+Together, and similar. Providers are declared in `opencode.json`; API keys live
+in `~/.local/share/opencode/auth.json` and are never committed.
+
+## Key facts
+
+- Language: TypeScript, built with Bun; compiles to a standalone binary.
+- Build: `bun install && bun run --cwd packages/opencode build --single`
+- macOS caveat: re-sign with `codesign --force --sign - <binary>` after copying
+  a Bun-compiled binary, or it is SIGKILLed with exit code 137.
+- License: PolyForm Noncommercial 1.0.0 — source-available, free for
+  noncommercial use, **not** OSI-approved open source. Upstream opencode and
+  Kilo Code remain MIT and can be used commercially from their own repositories.
+
+## Documentation
+
+- [README](README.md): overview, install, BYOK configuration, license summary.
+- [docs/opencode-plus.md](docs/opencode-plus.md): configuration reference, build
+  flags, macOS exit-137 troubleshooting, update-prompt behaviour on custom
+  builds, upstream rebase guide.
+- [NOTICE.md](NOTICE.md): attribution and license compliance for both upstreams.
+- [LICENSE](LICENSE): PolyForm Noncommercial 1.0.0 full text.
+
+## Upstream and attribution
+
+- opencode — <https://github.com/anomalyco/opencode> (MIT) — the base agent.
+- Kilo Code — <https://github.com/Kilo-Org/kilocode> (MIT) — browser automation
+  approach; itself an opencode derivative.
+- Playwright MCP — <https://github.com/microsoft/playwright-mcp> — performs the
+  actual browser automation.
+
+## Keywords
+
+opencode, opencode fork, AI coding agent, terminal coding agent, TUI, BYOK,
+bring your own key, NVIDIA NIM, local LLM, self-hosted LLM, Ollama, vLLM,
+llama.cpp, LM Studio, tokens per second, tok/s, inference speed, model
+throughput, browser automation, Playwright, MCP, Model Context Protocol,
+browser agent, Antigravity alternative, open source coding assistant.

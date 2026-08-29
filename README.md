@@ -1,129 +1,242 @@
-<p align="center">
-  <a href="https://opencode.ai">
-    <picture>
-      <source srcset="packages/console/app/src/asset/logo-ornate-dark.svg" media="(prefers-color-scheme: dark)">
-      <source srcset="packages/console/app/src/asset/logo-ornate-light.svg" media="(prefers-color-scheme: light)">
-      <img src="packages/console/app/src/asset/logo-ornate-light.svg" alt="OpenCode logo">
-    </picture>
-  </a>
-</p>
-<p align="center">The open source AI coding agent.</p>
-<p align="center">
-  <a href="https://opencode.ai/discord"><img alt="Discord" src="https://img.shields.io/discord/1391832426048651334?style=flat-square&label=discord" /></a>
-  <a href="https://www.npmjs.com/package/opencode-ai"><img alt="npm" src="https://img.shields.io/npm/v/opencode-ai?style=flat-square" /></a>
-  <a href="https://github.com/anomalyco/opencode/actions/workflows/publish.yml"><img alt="Build status" src="https://img.shields.io/github/actions/workflow/status/anomalyco/opencode/publish.yml?style=flat-square&branch=dev" /></a>
-</p>
+# opencode+
 
-<p align="center">
-  <a href="README.md">English</a> |
-  <a href="README.zh.md">简体中文</a> |
-  <a href="README.zht.md">繁體中文</a> |
-  <a href="README.ko.md">한국어</a> |
-  <a href="README.de.md">Deutsch</a> |
-  <a href="README.es.md">Español</a> |
-  <a href="README.fr.md">Français</a> |
-  <a href="README.it.md">Italiano</a> |
-  <a href="README.da.md">Dansk</a> |
-  <a href="README.ja.md">日本語</a> |
-  <a href="README.pl.md">Polski</a> |
-  <a href="README.ru.md">Русский</a> |
-  <a href="README.bs.md">Bosanski</a> |
-  <a href="README.ar.md">العربية</a> |
-  <a href="README.no.md">Norsk</a> |
-  <a href="README.br.md">Português (Brasil)</a> |
-  <a href="README.th.md">ไทย</a> |
-  <a href="README.tr.md">Türkçe</a> |
-  <a href="README.uk.md">Українська</a> |
-  <a href="README.bn.md">বাংলা</a> |
-  <a href="README.gr.md">Ελληνικά</a> |
-  <a href="README.vi.md">Tiếng Việt</a>
-</p>
+A small, opinionated distribution of [opencode](https://github.com/anomalyco/opencode) —
+the open source AI coding agent — with three additions aimed at people who run
+**local and self-hosted LLMs** and want a **browser-capable agent** without
+switching to a closed-source IDE.
 
-[![OpenCode Terminal UI](packages/web/src/assets/lander/screenshot.png)](https://opencode.ai)
+This is a fork, not a rewrite. Almost all of the code here is opencode's, and
+upstream deserves the credit for it. What this repo adds is small and specific:
+
+| # | Addition | Why |
+|---|---|---|
+| 1 | **Tokens/second indicator** in the TUI | See real generation speed when running local models |
+| 2 | **`chat` agent mode** | Use models that have no tool-calling support |
+| 3 | **Browser automation** (Playwright + system Chrome) | Give the agent real browser control |
 
 ---
 
-### Installation
+## 1. Tokens/second indicator
+
+opencode shows you the response. It does not show you how *fast* it arrived.
+
+That is fine when you are calling a hosted frontier model, where throughput is
+roughly constant and not your problem. It is much less fine when you are running
+your own inference — Ollama, vLLM, llama.cpp, LM Studio, a spare GPU box over
+Tailscale — because generation speed is the single number that tells you whether
+your setup is healthy.
+
+Quantisation level, context length, GPU/CPU split, whether the model actually
+fit in VRAM or is quietly spilling into system RAM: all of these show up as
+tokens/second, and almost nothing else surfaces them. A model that normally runs
+at 27 tok/s dropping to 1.8 tok/s is not a subtle regression, but without a
+readout you just experience it as "feels slow today".
+
+This fork adds two things to the TUI:
+
+- A **live** counter pinned above the input while the model is generating,
+  showing token count, current tok/s, and elapsed time. It updates ~4×/second
+  and is fixed in place, so it does not scroll away with the conversation.
+- A **final** per-message figure appended to each completed assistant message's
+  footer, so you can scroll back and compare.
+
+The live figure estimates token count from streamed characters (÷4) until the
+real usage numbers arrive, then switches to the exact value. So treat the
+in-flight number as an indicator and the settled number as accurate.
+
+No configuration. It is always on.
+
+## 2. `chat` agent mode
+
+Many capable local models are poor at — or entirely incapable of — tool calling.
+Point opencode at one of those and you get a bad time: the agent tries to invoke
+tools, the model emits malformed calls or hallucinates results, and the session
+derails before you get an answer.
+
+`chat` mode is a preset that removes the problem by removing the tools. Every
+tool is disabled and every permission is set to `deny`, leaving a plain
+conversational assistant with no file, shell, or network access.
+
+Useful for:
+
+- Models with no tool-calling support at all (Gemma 2, many uncensored finetunes)
+- Models whose tool-calling is unreliable enough to be worse than nothing
+- Just wanting to ask a question without an agent deciding to read your repo
+
+Select it like any other agent mode. The definition lives in your
+`opencode.json` — see [`docs/opencode-plus.md`](docs/opencode-plus.md) for the
+exact block to copy.
+
+## 3. Browser automation
+
+An agent that can drive a real browser — navigate, click, fill forms, read
+rendered pages — is the headline feature of tools like Google's Antigravity. You
+do not need a closed-source IDE for it.
+
+This fork can register Microsoft's official
+[`@playwright/mcp`](https://github.com/microsoft/playwright-mcp) server
+automatically, giving the agent browser tools with no manual MCP configuration.
+
+Enable it with an environment variable:
 
 ```bash
-# YOLO
-curl -fsSL https://opencode.ai/install | bash
-
-# Package managers
-npm i -g opencode-ai@latest        # or bun/pnpm/yarn
-scoop install opencode             # Windows
-choco install opencode             # Windows
-brew install anomalyco/tap/opencode # macOS and Linux (recommended, always up to date)
-brew install opencode              # macOS and Linux (official brew formula, updated less)
-sudo pacman -S opencode            # Arch Linux (Stable)
-paru -S opencode-bin               # Arch Linux (Latest from AUR)
-mise use -g opencode               # Any OS
-nix run nixpkgs#opencode           # or github:anomalyco/opencode for latest dev branch
+OPENCODE_BROWSER_AUTOMATION=1 opencode
 ```
 
-> [!TIP]
-> Remove versions older than 0.1.x before installing.
+That is the whole setup. It uses your **system-installed Chrome** by default
+rather than downloading a separate Chromium, and runs **headed** by default so
+you can watch what the agent is doing.
 
-### Desktop App (BETA)
+| Variable | Default | Effect |
+|---|---|---|
+| `OPENCODE_BROWSER_AUTOMATION` | off | Master switch |
+| `OPENCODE_BROWSER_HEADLESS` | `false` | Run with no visible window |
+| `OPENCODE_BROWSER_SYSTEM_CHROME` | `true` | Use system Chrome instead of bundled Chromium |
 
-OpenCode is also available as a desktop application. Download directly from the [releases page](https://github.com/anomalyco/opencode/releases) or [opencode.ai/download](https://opencode.ai/download).
-
-| Platform              | Download                           |
-| --------------------- | ---------------------------------- |
-| macOS (Apple Silicon) | `opencode-desktop-mac-arm64.dmg`   |
-| macOS (Intel)         | `opencode-desktop-mac-x64.dmg`     |
-| Windows               | `opencode-desktop-windows-x64.exe` |
-| Linux                 | `.deb`, `.rpm`, or `.AppImage`     |
+Verify it is live:
 
 ```bash
-# macOS (Homebrew)
-brew install --cask opencode-desktop
-# Windows (Scoop)
-scoop bucket add extras; scoop install extras/opencode-desktop
+$ OPENCODE_BROWSER_AUTOMATION=1 opencode mcp list
+┌  MCP Servers
+│
+●  ✓ browser  connected
+│      npx -y @playwright/mcp@latest --browser chrome
+│
+└  1 server(s)
 ```
 
-#### Installation Directory
+If you already define a `browser` MCP server in your own config, yours wins and
+this does nothing.
 
-The install script respects the following priority order for the installation path:
-
-1. `$OPENCODE_INSTALL_DIR` - Custom installation directory
-2. `$XDG_BIN_DIR` - XDG Base Directory Specification compliant path
-3. `$HOME/bin` - Standard user binary directory (if it exists or can be created)
-4. `$HOME/.opencode/bin` - Default fallback
-
-```bash
-# Examples
-OPENCODE_INSTALL_DIR=/usr/local/bin curl -fsSL https://opencode.ai/install | bash
-XDG_BIN_DIR=$HOME/.local/bin curl -fsSL https://opencode.ai/install | bash
-```
-
-### Agents
-
-OpenCode includes two built-in agents you can switch between with the `Tab` key.
-
-- **build** - Default, full-access agent for development work
-- **plan** - Read-only agent for analysis and code exploration
-  - Denies file edits by default
-  - Asks permission before running bash commands
-  - Ideal for exploring unfamiliar codebases or planning changes
-
-Also included is a **general** subagent for complex searches and multistep tasks.
-This is used internally and can be invoked using `@general` in messages.
-
-Learn more about [agents](https://opencode.ai/docs/agents).
-
-### Documentation
-
-For more info on how to configure OpenCode, [**head over to our docs**](https://opencode.ai/docs).
-
-### Contributing
-
-If you're interested in contributing to OpenCode, please read our [contributing docs](./CONTRIBUTING.md) before submitting a pull request.
-
-### Building on OpenCode
-
-If you are working on a project that's related to OpenCode and is using "opencode" as part of its name, for example "opencode-dashboard" or "opencode-mobile", please add a note to your README to clarify that it is not built by the OpenCode team and is not affiliated with us in any way.
+**Credit where it is due:** this approach is ported from
+[Kilo Code](https://github.com/Kilo-Org/kilocode), which is itself an opencode
+derivative and which implements its browser agent the same way. See
+[`NOTICE.md`](NOTICE.md).
 
 ---
 
-**Join our community** [Discord](https://discord.gg/opencode) | [X.com](https://x.com/opencode)
+## Install
+
+Requires [Bun](https://bun.sh) (the version in the root `package.json`
+`packageManager` field) and a C toolchain for native modules.
+
+```bash
+git clone <this-repo>
+cd opencode
+bun install
+bun run --cwd packages/opencode build --single
+```
+
+`--single` builds only for your current platform. The binary lands at:
+
+```
+packages/opencode/dist/opencode-<platform>-<arch>/bin/opencode
+```
+
+Put it somewhere on your `PATH`, or keep it out of the way and use a shell
+wrapper — the wrapper approach is handy because it lets you pin environment
+variables:
+
+```bash
+# ~/.zshrc
+opencode() {
+  OPENCODE_DISABLE_CHANNEL_DB=1 \
+  OPENCODE_BROWSER_AUTOMATION=1 \
+  "$HOME/.opencode-plus/opencode" "$@"
+}
+```
+
+### macOS: re-sign after copying
+
+If you copy the built binary to another location on macOS, **re-sign it**:
+
+```bash
+codesign --force --sign - /path/to/opencode
+```
+
+Without this the binary is killed on launch with **exit code 137** (SIGKILL) and
+no error message. This affects Bun-compiled binaries generally, not just this
+project. Full explanation in
+[`docs/opencode-plus.md`](docs/opencode-plus.md#macos-exit-code-137).
+
+## Bring your own key (BYOK)
+
+opencode talks to any OpenAI-compatible endpoint via the
+`@ai-sdk/openai-compatible` adapter, so local servers and hosted APIs are
+configured identically. Example using NVIDIA NIM's free tier alongside a local
+Ollama instance:
+
+```jsonc
+{
+  "$schema": "https://opencode.ai/config.json",
+  "provider": {
+    "nvidia": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "NVIDIA NIM",
+      "options": { "baseURL": "https://integrate.api.nvidia.com/v1" },
+      "models": {
+        "moonshotai/kimi-k3": { "name": "Kimi K3" }
+      }
+    },
+    "local": {
+      "npm": "@ai-sdk/openai-compatible",
+      "name": "Local Ollama",
+      "options": { "baseURL": "http://127.0.0.1:11434/v1" },
+      "models": {
+        "qwen2.5-coder:32b": { "name": "Qwen2.5 Coder 32B" }
+      }
+    }
+  }
+}
+```
+
+API keys go in opencode's credential store, **never in your config file or this
+repo**:
+
+```jsonc
+// ~/.local/share/opencode/auth.json  — git-ignored, chmod 600
+{
+  "nvidia": { "type": "api", "key": "nvapi-YOUR_KEY_HERE" }
+}
+```
+
+More detail in [`docs/opencode-plus.md`](docs/opencode-plus.md).
+
+## Staying current with upstream
+
+Upstream opencode moves fast. This fork is deliberately small so that rebasing
+stays cheap — the tokens/second change touches one file, and the browser
+automation change touches two.
+
+```bash
+git fetch origin
+git rebase v<latest-tag>
+bun install
+bun run --cwd packages/opencode build --single
+```
+
+## License
+
+**PolyForm Noncommercial License 1.0.0** — free to use, modify, and share for
+any noncommercial purpose. See [`LICENSE`](LICENSE).
+
+To be accurate rather than flattering: PolyForm Noncommercial is
+**source-available**, not OSI-approved open source, because it restricts field
+of use. If you need a permissive, commercially-usable license, use
+[upstream opencode](https://github.com/anomalyco/opencode) directly — it is MIT,
+and this fork cannot and does not change that.
+
+Both upstream projects are MIT and their notices are preserved in
+[`LICENSES/`](LICENSES/). Attribution details are in [`NOTICE.md`](NOTICE.md).
+
+## Credits
+
+- [**opencode**](https://github.com/anomalyco/opencode) — the actual coding
+  agent this is built on. Nearly all credit belongs here.
+- [**Kilo Code**](https://github.com/Kilo-Org/kilocode) — the browser
+  automation approach.
+- [**Playwright MCP**](https://github.com/microsoft/playwright-mcp) — Microsoft's
+  MCP server doing the real browser work.
+
+Upstream's original README is preserved as
+[`README.opencode-upstream.md`](README.opencode-upstream.md).

@@ -32,3 +32,17 @@ UPCOMING_CHANGELOG.md
 logs/
 *.bun-build
 tsconfig.tsbuildinfo
+
+# opencode+ : never commit credentials.
+# opencode stores API keys in ~/.local/share/opencode/auth.json, which is outside
+# this repository — these patterns are defence in depth in case one is ever copied
+# in for testing.
+auth.json
+**/auth.json
+*.credentials.json
+.env.*
+!.env.example
+secrets/
+
+# Personal run helpers (contain machine-specific absolute paths)
+run-patched.sh
