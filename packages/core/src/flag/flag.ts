@@ -34,7 +34,7 @@ export const Flag = {
   OPENCODE_SERVER_USERNAME: process.env["OPENCODE_SERVER_USERNAME"],
   OPENCODE_DISABLE_FFF: fff === undefined ? process.platform === "win32" : truthy("OPENCODE_DISABLE_FFF"),
 
-  // opencode+ : browser automation (Playwright MCP), ported from Kilo Code (MIT).
+  // opencode-enhanced : browser automation (Playwright MCP), ported from Kilo Code (MIT).
   // When enabled, a "browser" MCP server running @playwright/mcp is registered
   // automatically, giving the agent real browser control without any manual config.
   OPENCODE_BROWSER_AUTOMATION: truthy("OPENCODE_BROWSER_AUTOMATION"),

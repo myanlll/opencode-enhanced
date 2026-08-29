@@ -1,4 +1,4 @@
-# opencode+
+# opencode-enhanced
 
 > A fork of opencode (the open source AI coding agent) that adds a tokens/second
 > performance indicator, a tool-free `chat` agent mode, and browser automation
@@ -6,7 +6,7 @@
 > self-hosted LLMs, and at anyone who wants a browser-capable coding agent
 > without a closed-source IDE.
 
-opencode+ is a small distribution layered on upstream opencode. It is not a
+opencode-enhanced is a small distribution layered on upstream opencode. It is not a
 rewrite: nearly all code is upstream's, and the fork's own diff spans three
 files. It is designed to be cheap to rebase as upstream moves.
 
@@ -31,7 +31,7 @@ files. It is designed to be cheap to rebase as upstream moves.
   MCP setup. Uses system-installed Chrome by default and runs headed by default.
   Additional switches: `OPENCODE_BROWSER_HEADLESS`,
   `OPENCODE_BROWSER_SYSTEM_CHROME`. Ported from Kilo Code, which implements its
-  browser agent the same way. This makes opencode+ a viable open, self-hosted
+  browser agent the same way. This makes opencode-enhanced a viable open, self-hosted
   alternative to browser-agent IDEs such as Google Antigravity.
 
 ## Bring your own key (BYOK)
@@ -55,7 +55,7 @@ in `~/.local/share/opencode/auth.json` and are never committed.
 ## Documentation
 
 - [README](README.md): overview, install, BYOK configuration, license summary.
-- [docs/opencode-plus.md](docs/opencode-plus.md): configuration reference, build
+- [docs/opencode-enhanced.md](docs/opencode-enhanced.md): configuration reference, build
   flags, macOS exit-137 troubleshooting, update-prompt behaviour on custom
   builds, upstream rebase guide.
 - [NOTICE.md](NOTICE.md): attribution and license compliance for both upstreams.

@@ -1,4 +1,4 @@
-# opencode+
+# opencode-enhanced
 
 A small, opinionated distribution of [opencode](https://github.com/anomalyco/opencode) —
 the open source AI coding agent — with three additions aimed at people who run
@@ -64,7 +64,7 @@ Useful for:
 - Just wanting to ask a question without an agent deciding to read your repo
 
 Select it like any other agent mode. The definition lives in your
-`opencode.json` — see [`docs/opencode-plus.md`](docs/opencode-plus.md) for the
+`opencode.json` — see [`docs/opencode-enhanced.md`](docs/opencode-enhanced.md) for the
 exact block to copy.
 
 ## 3. Browser automation
@@ -142,7 +142,7 @@ variables:
 opencode() {
   OPENCODE_DISABLE_CHANNEL_DB=1 \
   OPENCODE_BROWSER_AUTOMATION=1 \
-  "$HOME/.opencode-plus/opencode" "$@"
+  "$HOME/.opencode-enhanced/opencode" "$@"
 }
 ```
 
@@ -157,7 +157,7 @@ codesign --force --sign - /path/to/opencode
 Without this the binary is killed on launch with **exit code 137** (SIGKILL) and
 no error message. This affects Bun-compiled binaries generally, not just this
 project. Full explanation in
-[`docs/opencode-plus.md`](docs/opencode-plus.md#macos-exit-code-137).
+[`docs/opencode-enhanced.md`](docs/opencode-enhanced.md#macos-exit-code-137).
 
 ## Bring your own key (BYOK)
 
@@ -200,7 +200,7 @@ repo**:
 }
 ```
 
-More detail in [`docs/opencode-plus.md`](docs/opencode-plus.md).
+More detail in [`docs/opencode-enhanced.md`](docs/opencode-enhanced.md).
 
 ## Staying current with upstream
 

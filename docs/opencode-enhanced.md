@@ -1,4 +1,4 @@
-# opencode+ — configuration, build notes, and troubleshooting
+# opencode-enhanced — configuration, build notes, and troubleshooting
 
 Companion document to the [README](../README.md).
 
@@ -101,7 +101,7 @@ version is set. On a non-`latest` channel this produces:
 0.0.0-<branch>-<UTC timestamp>
 ```
 
-e.g. `0.0.0-opencode-plus-202608291941`. This is expected for fork builds.
+e.g. `0.0.0-opencode-enhanced-202608291941`. This is expected for fork builds.
 
 ---
 
@@ -113,7 +113,7 @@ e.g. `0.0.0-opencode-plus-202608291941`. This is expected for fork builds.
 you copy it elsewhere it dies instantly and silently:
 
 ```
-$ ~/.opencode-plus/opencode --version
+$ ~/.opencode-enhanced/opencode --version
 $ echo $?
 137
 ```
@@ -123,16 +123,16 @@ Exit 137 is `128 + 9` — SIGKILL. There is no error message anywhere.
 **Diagnosis.** The copy is byte-identical to the original:
 
 ```
-$ shasum -a 256 dist/opencode-darwin-x64/bin/opencode ~/.opencode-plus/opencode
+$ shasum -a 256 dist/opencode-darwin-x64/bin/opencode ~/.opencode-enhanced/opencode
 3f96d1425b464a05e2d54aa5fa3cacb01ee65a59cd60e33ca0f44eaee323e5a8  dist/.../opencode
-3f96d1425b464a05e2d54aa5fa3cacb01ee65a59cd60e33ca0f44eaee323e5a8  ~/.opencode-plus/opencode
+3f96d1425b464a05e2d54aa5fa3cacb01ee65a59cd60e33ca0f44eaee323e5a8  ~/.opencode-enhanced/opencode
 ```
 
 and yet:
 
 ```
-$ codesign -v ~/.opencode-plus/opencode
-/Users/you/.opencode-plus/opencode: invalid signature (code or signature have been modified)
+$ codesign -v ~/.opencode-enhanced/opencode
+/Users/you/.opencode-enhanced/opencode: invalid signature (code or signature have been modified)
 In architecture: x86_64
 ```
 
@@ -151,7 +151,7 @@ codesign --force --sign - /path/to/opencode
 ```
 /path/to/opencode: replacing existing signature
 $ /path/to/opencode --version
-0.0.0-opencode-plus-202608291941
+0.0.0-opencode-enhanced-202608291941
 ```
 
 Make this part of your install step; it is required on every copy.

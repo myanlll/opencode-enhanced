@@ -597,7 +597,7 @@ const layer = Layer.effect(
           result.compaction = { ...result.compaction, prune: false }
         }
 
-        // opencode+ : browser automation.
+        // opencode-enhanced : browser automation.
         // Ported from Kilo Code (MIT, https://github.com/Kilo-Org/kilocode), which
         // implements this feature by registering Microsoft's official @playwright/mcp
         // server with the agent backend. We do the same natively here, gated behind an
