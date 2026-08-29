@@ -597,6 +597,31 @@ const layer = Layer.effect(
           result.compaction = { ...result.compaction, prune: false }
         }
 
+        // opencode+ : browser automation.
+        // Ported from Kilo Code (MIT, https://github.com/Kilo-Org/kilocode), which
+        // implements this feature by registering Microsoft's official @playwright/mcp
+        // server with the agent backend. We do the same natively here, gated behind an
+        // env var so it costs nothing when unused. An explicit "browser" entry in the
+        // user's own config always wins.
+        if (Flag.OPENCODE_BROWSER_AUTOMATION) {
+          if (result.mcp?.["browser"]) {
+            yield* Effect.logDebug("browser automation: config already defines a 'browser' MCP server, not overriding")
+          } else {
+            const command = ["npx", "-y", "@playwright/mcp@latest"]
+            if (Flag.OPENCODE_BROWSER_HEADLESS) command.push("--headless")
+            if (Flag.OPENCODE_BROWSER_SYSTEM_CHROME) command.push("--browser", "chrome")
+            result.mcp = {
+              ...result.mcp,
+              browser: {
+                type: "local" as const,
+                command,
+                enabled: true,
+                timeout: 60000,
+              },
+            }
+          }
+        }
+
         return {
           config: result,
           directories,
