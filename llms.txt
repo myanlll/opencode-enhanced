@@ -37,10 +37,10 @@ files. It is designed to be cheap to rebase as upstream moves.
 ## Bring your own key (BYOK)
 
 Any OpenAI-compatible endpoint works through the `@ai-sdk/openai-compatible`
-adapter, so hosted APIs and local servers are configured identically, NVIDIA
-NIM (`https://integrate.api.nvidia.com/v1`), Ollama, vLLM, LM Studio, OpenRouter,
-Together, and similar. Providers are declared in `opencode.json`; API keys live
-in `~/.local/share/opencode/auth.json` and are never committed.
+adapter, so hosted APIs and local servers are configured identically, Ollama,
+vLLM, LM Studio, OpenRouter, Together, and similar. Providers are declared in
+`opencode.json`; API keys live in `~/.local/share/opencode/auth.json` and are
+never committed.
 
 ## Key facts
 
@@ -72,7 +72,7 @@ in `~/.local/share/opencode/auth.json` and are never committed.
 ## Keywords
 
 opencode, opencode fork, AI coding agent, terminal coding agent, TUI, BYOK,
-bring your own key, NVIDIA NIM, local LLM, self-hosted LLM, Ollama, vLLM,
-llama.cpp, LM Studio, tokens per second, tok/s, inference speed, model
+bring your own key, OpenAI-compatible, local LLM, self-hosted LLM, Ollama, vLLM,
+llama.cpp, LM Studio, OpenRouter, tokens per second, tok/s, inference speed, model
 throughput, browser automation, Playwright, MCP, Model Context Protocol,
 browser agent, Antigravity alternative, open source coding assistant.

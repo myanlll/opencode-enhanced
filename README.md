@@ -177,19 +177,19 @@ project. Full explanation in
 
 opencode talks to any OpenAI-compatible endpoint via the
 `@ai-sdk/openai-compatible` adapter, so local servers and hosted APIs are
-configured identically. Example using NVIDIA NIM's free tier alongside a local
-Ollama instance:
+configured identically. Example using a hosted OpenAI-compatible provider
+alongside a local Ollama instance:
 
 ```jsonc
 {
   "$schema": "https://opencode.ai/config.json",
   "provider": {
-    "nvidia": {
+    "hosted": {
       "npm": "@ai-sdk/openai-compatible",
-      "name": "NVIDIA NIM",
-      "options": { "baseURL": "https://integrate.api.nvidia.com/v1" },
+      "name": "Hosted provider",
+      "options": { "baseURL": "https://your-provider.example/v1" },
       "models": {
-        "moonshotai/kimi-k3": { "name": "Kimi K3" }
+        "some-model-id": { "name": "Some Model" }
       }
     },
     "local": {
@@ -204,13 +204,17 @@ Ollama instance:
 }
 ```
 
+Any OpenAI-compatible hosted provider works the same way, just swap the
+`baseURL` and model id. This includes providers with a free tier, opencode's
+own [provider docs](https://opencode.ai/docs/providers) list what's out there.
+
 API keys go in opencode's credential store, **never in your config file or this
 repo**:
 
 ```jsonc
 // ~/.local/share/opencode/auth.json , git-ignored, chmod 600
 {
-  "nvidia": { "type": "api", "key": "nvapi-YOUR_KEY_HERE" }
+  "hosted": { "type": "api", "key": "YOUR_KEY_HERE" }
 }
 ```
 
