@@ -1310,6 +1310,7 @@ export function Session() {
                 <Show when={session()?.parentID}>
                   <SubagentFooter />
                 </Show>
+                <LiveTokenStatus sessionID={route.sessionID} />
                 <Show when={visible()}>
                   <pluginRuntime.Slot
                     name="session_prompt"
@@ -1467,6 +1468,79 @@ function UserMessage(props: {
   )
 }
 
+// Fixed live token/speed indicator, pinned just above the input (does not scroll with the chat).
+// Shows the currently-generating message's live tok/s, then holds the last completed value.
+function LiveTokenStatus(props: { sessionID: string }) {
+  const { theme } = useTheme()
+  const sync = useSync()
+  const messages = createMemo(() => sync.data.message[props.sessionID] ?? [])
+  const lastAssistant = createMemo(() => {
+    const msgs = messages()
+    for (let i = msgs.length - 1; i >= 0; i--) {
+      const m = msgs[i]
+      if (m.role === "assistant") return m
+    }
+    return undefined
+  })
+  const final = createMemo(() => {
+    const m = lastAssistant()
+    if (!m) return true
+    return Boolean(m.finish && !["tool-calls", "unknown"].includes(m.finish))
+  })
+  const [nowTick, setNowTick] = createSignal(Date.now())
+  onMount(() => {
+    const id = setInterval(() => {
+      if (!final()) setNowTick(Date.now())
+    }, 250)
+    onCleanup(() => clearInterval(id))
+  })
+  const startTime = createMemo(() => {
+    const m = lastAssistant()
+    if (!m) return 0
+    const user = messages().find((x) => x.role === "user" && x.id === m.parentID)
+    return user?.time?.created ?? 0
+  })
+  const liveDuration = createMemo(() => {
+    const m = lastAssistant()
+    const start = startTime()
+    if (!m || !start) return 0
+    if (final() && m.time?.completed) return m.time.completed - start
+    return nowTick() - start
+  })
+  const liveTokens = createMemo(() => {
+    const m = lastAssistant()
+    if (!m) return 0
+    const real = m.tokens?.output
+    if (final() && real) return real
+    let chars = 0
+    const parts = sync.data.part[m.id] ?? []
+    for (const p of parts) {
+      const t = (p as any).text
+      if (typeof t === "string") chars += t.length
+    }
+    const est = Math.round(chars / 4)
+    return real && real > est ? real : est
+  })
+  const tps = createMemo(() => {
+    const ms = liveDuration()
+    const toks = liveTokens()
+    if (!ms || !toks) return 0
+    return toks / (ms / 1000)
+  })
+  return (
+    <Show when={tps()}>
+      <box paddingLeft={3} paddingBottom={1} flexShrink={0}>
+        <text fg={theme.textMuted}>
+          {liveTokens().toLocaleString()} tokens · {tps().toFixed(2)} t/s
+          <Show when={!final()}>
+            <span> · {Locale.duration(liveDuration())}</span>
+          </Show>
+        </text>
+      </box>
+    </Show>
+  )
+}
+
 function AssistantMessage(props: { message: AssistantMessage; parts: Part[]; last: boolean }) {
   const ctx = use()
   const local = useLocal()
@@ -1485,6 +1559,14 @@ function AssistantMessage(props: { message: AssistantMessage; parts: Part[]; las
     const user = messages().find((x) => x.role === "user" && x.id === props.message.parentID)
     if (!user || !user.time) return 0
     return props.message.time.completed - user.time.created
+  })
+
+  const tokensPerSecond = createMemo(() => {
+    const ms = duration()
+    if (!ms) return 0
+    const output = props.message.tokens?.output
+    if (!output) return 0
+    return output / (ms / 1000)
   })
 
   const childShortcut = useCommandShortcut("session.child.first")
@@ -1564,6 +1646,12 @@ function AssistantMessage(props: { message: AssistantMessage; parts: Part[]; las
               <span style={{ fg: theme.textMuted }}> · {model()}</span>
               <Show when={duration()}>
                 <span style={{ fg: theme.textMuted }}> · {Locale.duration(duration())}</span>
+              </Show>
+              <Show when={tokensPerSecond()}>
+                <span style={{ fg: theme.textMuted }}>
+                  {" "}
+                  · {props.message.tokens?.output?.toLocaleString()} tokens · {tokensPerSecond().toFixed(2)} t/s
+                </span>
               </Show>
               <Show when={props.message.error?.name === "MessageAbortedError"}>
                 <span style={{ fg: theme.textMuted }}> · interrupted</span>
